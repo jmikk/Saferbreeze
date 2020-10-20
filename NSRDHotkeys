@@ -18,6 +18,13 @@
 // @require       https://openuserjs.org/src/libs/sizzle/GM_config.min.js
 // ==/UserScript==
 
+//*credit block ******************************************************
+//*Please include this block in any modified versions of this code as* 
+//*several people made this happen.	 			     *
+//*9003 wrote the bulk of this code but shamlessly copyed            *
+//*several large chunks from Dithpri, thank you for your help!       *
+//*End of Credit Block************************************************
+
 /*
  * Keybinds:
  * [e]ndo the nation you are on
