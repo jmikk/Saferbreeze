@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         NSRDHotkeys
-// @version      1.0
+// @version      1.5
 // @description  Breeze but safer I guess and opened up
 // @author       9003
 // @noframes
-// @updateURL    https://github.com/jmikk/NS/raw/master/The%20Bodge%20Job.js
+// @updateURL    https://github.com/jmikk/Saferbreeze/raw/main/NSRDHotkeys
 // @match        https://www.nationstates.net*
 // @match        https://www.nationstates.net/*
 // @match        https://web.archive.org/web*
@@ -35,10 +35,10 @@
 GM_config.init(
 {
   'MainNation': {
-    'section': [GM_config.create('Config settings'), 'This is where you put your info in'],
     'label': GM_config.create('Main Nation'),
+    'section': [GM_config.create('Config settings'), 'This is where you put your info in'],
     'type': 'text',
-    'default': 'Joe Simmons'
+    'default': '9003'
   },
   'password': {
     'label': GM_config.create('Password for Puppet creation'),
@@ -61,21 +61,16 @@ GM_config.init(
     'default':0
     },
     'email': {
-    'lavel': GM_config.create('Email for puppet creation'),
+    'label': GM_config.create('Email for puppet creation'),
     'type': 'text',
-    'default': 'YourEmailHere@DoIT.com'}
+    'default': 'YourEmailHere@DoIT.com'
+    }
 });
 
 
 
-
-
-
-//SET THIS FOR SAFTY
-//SET THESE TO YOUR MAIN NATION OR ANY NATION YOU DO NOT WANT TO MOVE
 var main = GM_config.get('MainNation'); //Needs to be all lowercase and have _ for spaces
-//SET THIS TO YOUR JUMP POINT FOR THE [l] keys
-var JP = GM_config.get('JP');
+var JP = GM_config.get('JP').replace(" ","_").toLowerCase;
 //SET THIS TO TRUE IF YOU WANT THE WAYBACKPAGE TO CLOSE AUTOMATICLY WHEN IT IS DONE SAVING WITH [S]
 var close_wayback = false;
 //END OF USER VAR
@@ -132,7 +127,6 @@ Mousetrap.bind(['p'],  function(ev){
                 $.post("//www.nationstates.net/page=UN_status?nspp=1", "action=join_UN&chk=" + chk + "&submit=+Apply+to+Join+", callback);
 									});});
 
-    
 Mousetrap.bind(['s'],  function(ev){window.open("https://web.archive.org/save/"+window.location.href, '_blank');});
     if(close_wayback && window.location.href.startsWith("https://web.archive.org/web/"))
     {
@@ -269,6 +263,89 @@ E-mail:
 
 });
 
+Mousetrap.bind(['c'], function (el){
+var table; //<td><p><a target="_blank" href="https://www.nationstates.net/nation=`+temp[0]+`?nation=`+temp[0]+`&password=`+temp[1]+`&logging_in=1">Link to Puppet named `+temp[0]+`</a></p></td>
+var i;
+   // alert("test"+GM_config.get('count')+"test2");
+
+    for(i=0;i<GM_config.get('count');i++)
+    {
+    table=table+`<tr>`;
+    table=table+`<td><p><a target="_blank" href="https://www.nationstates.net/nation=`+GM_config.get('prefix')+i+`?nation=`+GM_config.get('prefix')+i+`+&password=`+GM_config.get('password')+`&logging_in=1">Link to `+GM_config.get('prefix')+i+`</a></p></td>`;
+    table=table+`</tr>`;
+    }
+   
+
+document.write(`
+<html>
+<head>
+<style>
+td.createcol p {
+	padding-left: 10em;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+a:visited {
+	color: grey;
+}
+
+table {
+	border-collapse: collapse;
+	display: table-cell;
+	max-width: 100%;
+	border: 1px solid darkorange;
+}
+
+tr, td {
+	border-bottom: 1px solid darkorange;
+}
+
+td p {
+	padding: 0.5em;
+}
+
+tr:hover {
+	background-color: lightgrey;
+}
+
+</style>
+</head>
+<body>
+<table>
+<tr>
+`
+
++table+
+
+`
+</tr>
+<td><p><a target="_blank" href="https://www.nationstates.net/www.nationstates.net/page=blank">Done!</a></p></td>
+</table>
+<script>
+document.querySelectorAll("td").forEach(function(el) {
+	el.addEventListener("click", function() {
+		let myidx = 0;
+		const row = el.parentNode;
+		let child = el;
+		while((child = child.previousElementSibling) != null) {
+			myidx++;
+		}
+		row.nextElementSibling.childNodes[myidx].querySelector("p > a").focus();
+		row.parentNode.removeChild(row);
+	});
+});
+</script>
+</body>
+`)
+
+
+});
+
+
     inputs.forEach(function(el) {
         // to be able to use keybinds while inputting numbers
         el.classList.add("mousetrap");
@@ -288,3 +365,8 @@ E-mail:
 
 
 })();
+
+
+
+
+
